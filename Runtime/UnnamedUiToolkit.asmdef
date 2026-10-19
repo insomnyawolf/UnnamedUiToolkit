@@ -1,0 +1,22 @@
+{
+    "name": "org.duckdns.insomnyawolf.UnnamedUiToolkit.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "com.unity.nuget.newtonsoft-json"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.nuget.newtonsoft-json",
+            "expression": "3",
+            "define": "NewtonsoftJsonAvailable"
+        }
+    ],
+    "noEngineReferences": false
+}

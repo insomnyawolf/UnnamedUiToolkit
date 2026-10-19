@@ -1,0 +1,12 @@
+{
+  "name": "org.duckdns.insomnyawolf.unnamed-ui-toolkit",
+  "displayName": "UnnamedUiToolkit",
+  "version": "0.0.2",
+  "description": "Attempt at an easy to use UI Library",
+  "gitDependencies": {},
+  "vpmDependencies": {},
+  "legacyFolders": {},
+  "legacyFiles": {},
+  "localPath": "",
+  "type": "tool"
+}
