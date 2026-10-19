@@ -1,5 +1,5 @@
+using System.Runtime.CompilerServices;
 using UnityEditor;
-using UnityEngine;
 
 namespace UnnamedUiToolkit
 {
@@ -51,7 +51,12 @@ namespace UnnamedUiToolkit
 
             ValueMember.Draw(this);
 
-            if (!Values.HasChanged())
+            // WHYYYYYYYYYYYYYYYYYYYYY
+            // Without the:
+            // !ValueMember.MemberType.IsChild()
+            // Serialized fields fail to update on events ....
+            // I'm so confused ...
+            if (!Values.HasChanged() && !ValueMember.MemberType.IsChild())
             {
                 return;
             }
@@ -60,6 +65,17 @@ namespace UnnamedUiToolkit
 
             ValueMember.SetExpression.Compiled(Instance, newValue);
 
+            if (SerializedProperty != null)
+            {
+                Undo.RecordObject(RootTarget, $"Changed {ValueMember.DisplayName}");
+
+                SerializedProperty.boxedValue = newValue;
+
+                SerializedProperty.serializedObject.ApplyModifiedProperties();
+
+                EditorUtility.SetDirty(RootTarget);
+            }
+
             if (ValueMember is IOnChangeMember onChange)
             {
                 if (onChange.OnChangeExpr != null)
@@ -67,19 +83,6 @@ namespace UnnamedUiToolkit
                     TriggerUiEvent(UiEventType.Update);
                 }
             }
-
-            if (SerializedProperty == null)
-            {
-                return;
-            }
-
-            Undo.RecordObject(RootTarget, $"Changed {ValueMember.DisplayName}");
-
-            SerializedProperty.boxedValue = newValue;
-
-            //SerializedProperty.serializedObject.ApplyModifiedProperties();
-
-            EditorUtility.SetDirty(RootTarget);
         }
     }
 }

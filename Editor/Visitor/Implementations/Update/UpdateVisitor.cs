@@ -8,13 +8,27 @@ namespace UnnamedUiToolkit
 
         public override void Visit(IUiToolkitBase Target)
         {
-            if (Target is not IUiToolkitValueMember ValueMember)
+            if (Target is IUiToolkitValueMemberBase ValueMemberBase)
             {
-                // No value, nothing to update
+                SerializedPath.SubPath = ValueMemberBase.RelativePath;
+            }
+
+            if (Target is IUiToolkitValueMember ValueMember)
+            {
+                ProcessValueMember(ValueMember);
+
                 return;
             }
 
-            SerializedPath.SubPath = ValueMember.RelativePath;
+            // No value, nothing to update
+        }
+
+        public void ProcessValueMember(IUiToolkitValueMember ValueMember)
+        {
+            if (ValueMember.MemberType.IsArray())
+            {
+                return;
+            }
 
             if (GetPropertyIfSerializable() is not SerializedProperty SerializedProperty)
             {
@@ -22,11 +36,6 @@ namespace UnnamedUiToolkit
                 // All members updated instantly in the code and interface
                 // But those updates doesn't automatically carry to serialized properties
                 // That is why this exist
-                return;
-            }
-
-            if (ValueMember.MemberType.IsArray())
-            {
                 return;
             }
 
@@ -41,7 +50,7 @@ namespace UnnamedUiToolkit
                 var cu = new ChildUpdater(ValueMember);
 
                 cu.RunNode(this);
-                // Unsure if i need this return;
+                
                 return;
             }
 

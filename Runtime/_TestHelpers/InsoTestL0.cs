@@ -7,6 +7,19 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class InsoTestL0 : MonoBehaviour// : InsoComponentBase
 {
+    // [OnChange(nameof(CallbackTest))]
+    // [field: SerializeField]
+    // public int CallbackSource { get; set; }
+
+    // [field: SerializeField]
+    // public int CallbackCounter = 0;
+
+    // private void CallbackTest() => CallbackCounter++;
+
+    // [Button]
+    // [DisplayName("Reset")]
+    // public void ResetCounter() => CallbackCounter = 0;
+
     //private InsoTestL1 InsoTestL1Field;
 
     //public InsoTestL1 InsoTestL1PropertyNonSerialized { get; set; }
@@ -18,11 +31,11 @@ public class InsoTestL0 : MonoBehaviour// : InsoComponentBase
 
     [field: SerializeField]
     public TestData InsoConfigTestSerialized { get; set; }
-    
+
     [DefaultSerializer]
     [field: SerializeField]
     public TestData InsoConfigTestSerializedDefault { get; set; }
-    // public bool FieldTest;
+    public bool FieldTest;
 
     // [Skip]
     // public bool SkipTest { get; set; }
@@ -38,17 +51,17 @@ public class InsoTestL0 : MonoBehaviour// : InsoComponentBase
 [Serializable]
 public class TestData
 {
-    public bool FieldTest;
+    // public bool FieldTest;
 
-    [Skip]
-    public bool SkipTest { get; set; }
+    // [Skip]
+    // public bool SkipTest { get; set; }
 
-    [DefaultSerializer]
-    [field: SerializeField]
-    public int[] IntTest { get; set; }
+    // [DefaultSerializer]
+    // [field: SerializeField]
+    // public int[] IntTest { get; set; }
 
-    [field: SerializeField]
-    public int[] IntTest2 { get; set; }
+    // [field: SerializeField]
+    // public int[] IntTest2 { get; set; }
 
     [OnChange(nameof(CallbackTest))]
     [field: SerializeField]
@@ -68,7 +81,7 @@ public class TestData
 [Serializable]
 public class InsoTestL1 : TestData
 {
-    
+
     [field: SerializeField]
     public InsoTestL2 InsoTestL2 { get; set; }
 }
