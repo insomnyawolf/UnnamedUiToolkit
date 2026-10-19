@@ -42,10 +42,6 @@ the drawer cache is copuled in a weird way that i don't like(you were so close..
 
 Working on these atm
 
-#### Fix update callback
-
-I don't know what's going on, it seems to fire properly an go throught the nodes properly but something is not working
-
 #### Cache all reflection
 
 This will improve performance on large editors
