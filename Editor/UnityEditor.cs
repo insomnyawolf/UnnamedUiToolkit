@@ -18,6 +18,8 @@ namespace UnnamedUiToolkit
     {
         protected Action OnGuiHandler;
         protected TreeHandler InspectorTreeHandler;
+        protected DrawerVisitor DrawerVisitor;
+        protected UpdateVisitor UpdateVisitor;
 
         protected void OnEnable()
         {
@@ -37,12 +39,7 @@ namespace UnnamedUiToolkit
 
             InspectorTreeHandler.Initialize();
 
-            OnGuiHandler = CustomInspectorGui;
-        }
-
-        protected void CustomInspectorGui()
-        {
-            var visitor = new DrawerVisitor()
+            UpdateVisitor = new UpdateVisitor()
             {
                 RootTarget = target,
                 SerializedObject = serializedObject,
@@ -50,12 +47,44 @@ namespace UnnamedUiToolkit
                 SerializedPath = new SerializedPath(),
             };
 
-            InspectorTreeHandler.VisitNodes(visitor);
+            DrawerVisitor = new DrawerVisitor()
+            {
+                RootTarget = target,
+                SerializedObject = serializedObject,
+                Instance = target,
+                SerializedPath = new SerializedPath(),
+            };
+
+            DrawerVisitor.UiEventHandler += UpdateCascade;
+            
+            OnGuiHandler = CustomInspectorGui;
+        }
+
+        protected void CustomInspectorGui()
+        {
+            using var ChangeCheck = new EditorGUI.ChangeCheckScope();
+
+            InspectorTreeHandler.VisitNodes(DrawerVisitor);
+
+            if (ChangeCheck.changed)
+            {
+                serializedObject.ApplyModifiedProperties();
+            }
         }
 
         public override void OnInspectorGUI()
         {
             OnGuiHandler();
+        }
+
+        protected void UpdateCascade(NodeVisitor NodeVisitor, UiEventType UiEventType)
+        {
+            if (UiEventType != UiEventType.Update)
+            {
+                return;
+            }
+
+            InspectorTreeHandler.VisitNodes(UpdateVisitor);
         }
     }
 }

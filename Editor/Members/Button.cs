@@ -1,5 +1,4 @@
 using System;
-using System.Linq.Expressions;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
@@ -22,7 +21,7 @@ namespace UnnamedUiToolkit
             Delegate.Compile();
         }
 
-        public DrawerVisitor Draw(DrawerVisitor DrawerVisitor)
+        public NodeVisitor Draw(NodeVisitor DrawerVisitor)
         {
             if (!GUILayout.Button(DisplayName)) return DrawerVisitor;
 
@@ -30,9 +29,7 @@ namespace UnnamedUiToolkit
 
             Delegate.Compiled(DrawerVisitor.Instance);
 
-            var updateCallbackData = DrawerVisitor.CloneTo<UpdateVisitor>();
-
-            DrawerVisitor.UiEventHandler(updateCallbackData);
+            DrawerVisitor.TriggerUiEvent(UiEventType.Update);
 
             // Should be set dirty bu the update itself (?)
             //EditorUtility.SetDirty(DrawerVisitor.RootTarget);

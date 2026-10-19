@@ -3,37 +3,32 @@ using UnityEngine;
 
 namespace UnnamedUiToolkit
 {
-    public class DrawerVisitor : NodeVisitor<DrawerVisitor>
+    public class DrawerVisitor : NodeVisitor
     {
         public override void Visit(IUiToolkitBase Target)
         {
-            if (Target is not IUiToolkitDraw drawable)
+            if (Target is IUiToolkitValueMemberBase ValueMemberBase)
             {
-                return;
+                SerializedPath.SubPath = ValueMemberBase.RelativePath;
             }
 
             if (Target is IUiToolkitValueMember ValueMember)
             {
-                SerializedPath.SubPath = ValueMember.RelativePath;
-
-                ProcessValueMember(drawable, ValueMember);
+                ProcessValueMember(ValueMember);
 
                 return;
             }
 
-            if (Target is IUiToolkitValueMemberBase ValueMemberBase)
+            if (Target is IUiToolkitDraw IUiToolkitDraw)
             {
-                SerializedPath.SubPath = ValueMemberBase.RelativePath;
-
-                drawable.Draw(this);
+                IUiToolkitDraw.Draw(this);
 
                 return;
             }
 
-            drawable.Draw(this);
         }
 
-        public void ProcessValueMember(IUiToolkitDraw drawable, IUiToolkitValueMember ValueMember)
+        public void ProcessValueMember(IUiToolkitValueMember ValueMember)
         {
             Values = new Values();
 
@@ -54,7 +49,7 @@ namespace UnnamedUiToolkit
                 Values.Update(SerializedProperty.boxedValue);
             }
 
-            drawable.Draw(this);
+            ValueMember.Draw(this);
 
             if (!Values.HasChanged())
             {
@@ -65,33 +60,26 @@ namespace UnnamedUiToolkit
 
             ValueMember.SetExpression.Compiled(Instance, newValue);
 
+            if (ValueMember is IOnChangeMember onChange)
+            {
+                if (onChange.OnChangeExpr != null)
+                {
+                    TriggerUiEvent(UiEventType.Update);
+                }
+            }
+
             if (SerializedProperty == null)
             {
                 return;
             }
 
-            Undo.RecordObject(RootTarget, $"Changed {drawable.DisplayName}");
+            Undo.RecordObject(RootTarget, $"Changed {ValueMember.DisplayName}");
 
             SerializedProperty.boxedValue = newValue;
 
-            SerializedProperty.serializedObject.ApplyModifiedProperties();
-
-            // Not what we need
-            //sp.serializedObject.Update();
+            //SerializedProperty.serializedObject.ApplyModifiedProperties();
 
             EditorUtility.SetDirty(RootTarget);
-        }
-
-        public SerializedProperty GetPropertyIfSerializable()
-        {
-            //if (Metadata.IsRuntimeOnly) return null;
-            //if (Metadata.MemberType.IsArray) return null;
-
-            var fullPath = SerializedPath.FullPath;
-
-            var sp = SerializedObject.FindProperty(fullPath);
-
-            return sp;
         }
     }
 }

@@ -31,8 +31,7 @@ namespace UnnamedUiToolkit
             return attrArray;
         }
 
-        public void VisitNodes<TVisitor>(NodeVisitor<TVisitor> NodeVisitor)
-            where TVisitor : NodeVisitor<TVisitor>, new()
+        public void VisitNodes(NodeVisitor NodeVisitor)
         {
             foreach (var member in Members)
             {
@@ -147,5 +146,3 @@ namespace UnnamedUiToolkit
         }
     }
 }
-
-//UnityEngine.UIElements

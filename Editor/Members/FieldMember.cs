@@ -16,21 +16,17 @@ namespace UnnamedUiToolkit
 
             MemberType = MemberInfo.FieldType;
 
-            CreateCachedDrawer();
-
             SetExpression = new ()
             {
                 Expresion = BackingField.CreateSetDelegate<SetDelegate>(),
             };
-
-            SetExpression.Compile();
 
             GetExpression = new()
             {
                 Expresion = BackingField.CreateGetDelegate<GetDelegate>(),
             };
 
-            GetExpression.Compile();
+            FinishInitialization();
         }
     }
 }

@@ -3,10 +3,9 @@ using UnityEditor;
 
 namespace UnnamedUiToolkit
 {
-    public abstract class NodeVisitor<TVisitor> : NodeVisitorBase
-        where TVisitor : NodeVisitor<TVisitor>, new ()
+    public abstract class NodeVisitor : NodeVisitorBase
     {
-        public Func<NodeVisitorBase, bool> UiEventHandler { get; set; }
+        public event Action<NodeVisitor, UiEventType> UiEventHandler;
         public SerializedObject SerializedObject { get; set; }
         public UnityEngine.Object RootTarget { get; set; }
 
@@ -14,7 +13,8 @@ namespace UnnamedUiToolkit
         public Values Values { get; set; }
         public SerializedPath SerializedPath { get; set; }
 
-        public virtual TVisitor GetChildVisitor()
+        public virtual TVisitor GetChildVisitor<TVisitor>()
+            where TVisitor : NodeVisitor, new()
         {
             var thing = new TVisitor()
             {
@@ -29,7 +29,7 @@ namespace UnnamedUiToolkit
         }
 
         public virtual TOtherVisitor CloneTo<TOtherVisitor>()
-            where TOtherVisitor : NodeVisitor<TOtherVisitor>, new()
+            where TOtherVisitor : NodeVisitor, new()
         {
             var thing = new TOtherVisitor()
             {
@@ -43,7 +43,22 @@ namespace UnnamedUiToolkit
 
             return thing;
         }
+
+        public SerializedProperty GetPropertyIfSerializable()
+        {
+            //if (Metadata.IsRuntimeOnly) return null;
+            //if (Metadata.MemberType.IsArray) return null;
+
+            var fullPath = SerializedPath.FullPath;
+
+            var sp = SerializedObject.FindProperty(fullPath);
+
+            return sp;
+        }
+
+        public void TriggerUiEvent(UiEventType UiEventType)
+        {
+            UiEventHandler(this, UiEventType);
+        }
     }
 }
-
-//UnityEngine.UIElements

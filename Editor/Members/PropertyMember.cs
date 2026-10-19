@@ -15,8 +15,6 @@ namespace UnnamedUiToolkit
         {
             MemberType = MemberInfo.PropertyType;
 
-            CreateCachedDrawer();
-
             this.BackingField = BackingField;
 
             var accesors = MemberInfo.GetAccessors(nonPublic: true);
@@ -31,8 +29,6 @@ namespace UnnamedUiToolkit
                     {
                         Expresion = accessor.CreateUniversalDelegate<SetDelegate>(isWeakBind: true),
                     };
-
-                    SetExpression.Compile();
                 }
                 else
                 {
@@ -40,10 +36,10 @@ namespace UnnamedUiToolkit
                     {
                         Expresion = accessor.CreateUniversalDelegate<GetDelegate>(isWeakBind: true),
                     };
-
-                    GetExpression.Compile();
                 }
             }
+
+            FinishInitialization();
         }
     }
 }

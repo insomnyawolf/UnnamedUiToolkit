@@ -1,9 +1,6 @@
-using UnityEditor;
-
 namespace UnnamedUiToolkit
 {
-    public abstract class DrawerVisitorTarget : BaseVisitorTarget<DrawerVisitor>
-        //where TIUiToolkit : IUiToolkitBase
+    public abstract class DrawerVisitorTarget : BaseVisitorTarget
     {
         protected DrawerVisitorTarget(IUiToolkitValueMember Member) : base(Member) { }
     }

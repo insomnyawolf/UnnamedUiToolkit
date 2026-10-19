@@ -3,21 +3,13 @@ using System.Reflection;
 
 namespace UnnamedUiToolkit
 {
-    public interface IUiToolkitValueMember : IUiToolkitValueMemberInternal<GetDelegate, SetDelegate> { }
-
-    public interface IUiToolkitValueMemberInternal<TGetDelegate, TSetDelegate> : IUiToolkitValueMemberBase
-        where TGetDelegate : Delegate
-        where TSetDelegate : Delegate
+    public interface IUiToolkitValueMember : IUiToolkitValueMemberBase, IUiToolkitDraw
     {
         bool IsRuntimeOnly { get; }
         FieldInfo BackingField { get; }
         Type MemberType { get; }
-        public DynamicCall<TGetDelegate> GetExpression { get; }
-        public DynamicCall<TSetDelegate> SetExpression { get; }
-    }
-
-    public interface IUiToolkitValueMemberBase : IUiToolkitMember
-    {
-        string RelativePath { get; }
+        BaseVisitorTarget VisitorTarget { get; }
+        public DynamicCall<GetDelegate> GetExpression { get; }
+        public DynamicCall<SetDelegate> SetExpression { get; }
     }
 }

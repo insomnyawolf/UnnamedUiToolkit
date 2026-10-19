@@ -46,7 +46,7 @@ namespace UnnamedUiToolkit
             base.ProcessAttribute(Attribute);
         }
 
-        public DrawerVisitor Draw(DrawerVisitor Visitor)
+        public NodeVisitor Draw(NodeVisitor Visitor)
         {
             var SerializedProperty = Visitor.GetPropertyIfSerializable();
 
@@ -55,14 +55,7 @@ namespace UnnamedUiToolkit
                 return Visitor;
             }
 
-            using var ChangeCheck = new EditorGUI.ChangeCheckScope();
-
             var newVal = EditorGUILayout.PropertyField(property: SerializedProperty, includeChildren: true);
-
-            if (ChangeCheck.changed)
-            {
-                SerializedProperty.serializedObject.ApplyModifiedProperties();
-            }
 
             return Visitor;
         }

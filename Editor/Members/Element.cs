@@ -12,8 +12,6 @@ namespace UnnamedUiToolkit
         public bool IsSkip { get; protected set; }
         public bool IsHide { get; protected set; }
 
-        //public Action<NodeVisitor> CachedDrawer { get; protected set; }
-
         protected UiToolkitElement(InspectableMemberExtras InspectableMemberExtras)
         {
             this.InspectableMemberExtras = InspectableMemberExtras ?? new InspectableMemberExtras();

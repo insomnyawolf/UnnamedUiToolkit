@@ -50,7 +50,7 @@ public class TestData
     [field: SerializeField]
     public int[] IntTest2 { get; set; }
 
-    //[OnChange(nameof(CallbackTest))]
+    [OnChange(nameof(CallbackTest))]
     [field: SerializeField]
     public int CallbackSource { get; set; }
 

@@ -1,13 +1,7 @@
-using System;
-using UnityEngine;
-
 namespace UnnamedUiToolkit
 {
-    public abstract class BaseVisitorTarget<TVisitor>
-        where TVisitor : NodeVisitor<TVisitor>, new()
+    public abstract class BaseVisitorTarget
     {
-        public static readonly GUILayoutOption[] EmptyGuiLayoutOptions = Array.Empty<GUILayoutOption>();
-
         public IUiToolkitValueMember Member { get; }
 
         public BaseVisitorTarget(IUiToolkitValueMember Member)
@@ -15,6 +9,6 @@ namespace UnnamedUiToolkit
             this.Member = Member;
         }
 
-        public abstract TVisitor RunNode(TVisitor value);
+        public abstract NodeVisitor RunNode(NodeVisitor value);
     }
 }

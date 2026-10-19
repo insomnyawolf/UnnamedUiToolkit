@@ -1,4 +1,3 @@
-
 using System;
 
 namespace UnnamedUiToolkit
@@ -6,33 +5,6 @@ namespace UnnamedUiToolkit
     public class PrimitiveEditor : DrawerVisitorTarget
     {
         // Simple drawer mapping based on type
-        public static bool IsTarget(Type MemberType, out InspectorBinding binding)
-        {
-            binding = null;
-
-            if (MemberType.IsEnum)
-            {
-                return false;
-            }
-
-            if (MemberType.IsArray)
-            {
-                return false;
-            }
-
-            if (MemberType.IsUnityNativeType())
-            {
-                return false;
-            }
-
-            if (!InspectorBindingCache.PropertyDrawersCache.TryGetValue(MemberType, out binding))
-            {
-                return false;
-            }
-
-            return true;
-        }
-
         protected Func<object, object> CachedDrawer { get; set; }
         protected InspectorBinding InspectorBinding { get; set; }
 
@@ -44,7 +16,7 @@ namespace UnnamedUiToolkit
             // IdkHow To Avoid The Capturing
             object DrawPrimitive(object value)
             {
-                var val = InspectorBinding.Compiled(Member.DisplayName, value, EmptyGuiLayoutOptions);
+                var val = InspectorBinding.Compiled(Member.DisplayName, value, Constants.EmptyGuiLayoutOptions);
 
                 return val;
             }
@@ -52,7 +24,7 @@ namespace UnnamedUiToolkit
             CachedDrawer = DrawPrimitive;
         }
 
-        public override DrawerVisitor RunNode(DrawerVisitor Visitor)
+        public override NodeVisitor RunNode(NodeVisitor Visitor)
         {
             var values = Visitor.Values;
 

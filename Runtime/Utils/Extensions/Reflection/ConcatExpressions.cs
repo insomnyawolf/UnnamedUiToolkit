@@ -1,22 +1,25 @@
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
 public static class ExpressionConcat
 {
-    public static Expression<Delegate> Concat<Delegate>(
-        this Expression<Delegate> setter,
-        Expression<Delegate> onChange,
+    public static Expression<TD1> Concat<TD1, TD2>(
+        this Expression<TD1> Main,
+        Expression<TD2> Append,
         ParameterRewriter parameterRewriter = null
         )
+        where TD1 : Delegate
+        where TD2 : Delegate
     {
         // No callback to append
-        if (onChange == null) return setter;
+        if (Append == null) return Main;
 
         parameterRewriter ??= new();
 
-        var rewrittenOnChangeBody = parameterRewriter.Visit(onChange.Body);
+        var rewrittenOnChangeBody = parameterRewriter.Visit(Append.Body);
 
-        var setRt = setter.ReturnType;
+        var setRt = Main.ReturnType;
 
         var isVoid = setRt == typeof(void);
 
@@ -26,7 +29,7 @@ public static class ExpressionConcat
         {
             body = Expression.Block(
                 type:setRt, 
-                setter.Body, 
+                Main.Body, 
                 rewrittenOnChangeBody
             );
         }
@@ -37,16 +40,16 @@ public static class ExpressionConcat
             body = Expression.Block(
                 type: setRt,
                 variables: new[] { retVal },
-                Expression.Assign(retVal, setter.Body),
+                Expression.Assign(retVal, Main.Body),
                 rewrittenOnChangeBody,
                 retVal
             );
         }
 
-        var lambda = Expression.Lambda<Delegate>(
+        var lambda = Expression.Lambda<TD1>(
             body: body,
-            tailCall: setter.TailCall,
-            parameters: setter.Parameters
+            tailCall: Main.TailCall,
+            parameters: Main.Parameters
         );
 
         return lambda;
@@ -57,6 +60,11 @@ public class ParameterRewriter : ExpressionVisitor
 {
     private readonly Dictionary<ParameterExpression, ParameterExpression> Map;
 
+    /// <summary>
+    /// Key: Parameter To Replace
+    /// Value: Replacement
+    /// </summary>
+    /// <param name="map"></param>
     public ParameterRewriter(Dictionary<ParameterExpression, ParameterExpression> map = null)
     {
         Map = map ?? new();

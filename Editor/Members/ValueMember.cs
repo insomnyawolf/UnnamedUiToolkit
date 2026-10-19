@@ -4,9 +4,14 @@ using System.Reflection;
 namespace UnnamedUiToolkit
 {
     public abstract class UiToolkitValueMember :
-       UiToolkitValueMemberInternal<GetDelegate, SetDelegate>,
-       IUiToolkitValueMember
+        UiToolkitValueMemberInternal,
+        IUiToolkitValueMember,
+        IOnChangeMember
     {
+        public OnChangeAttribute OnChange { get; protected set; }
+        public DynamicCall<OnChange> OnChangeExpr { get; protected set; }
+        public override BaseVisitorTarget VisitorTarget { get; protected set; }
+
         public UiToolkitValueMember(MemberInfo MemberInfo, InspectableMemberExtras InspectableMemberExtras)
                : base(MemberInfo, InspectableMemberExtras)
         {
@@ -14,86 +19,123 @@ namespace UnnamedUiToolkit
             // CreateCachedDrawer();
         }
 
-        protected BaseVisitorTarget<DrawerVisitor> Cache;
-
-        public override DrawerVisitor Draw(DrawerVisitor Visitor)
+        public override NodeVisitor Draw(NodeVisitor Visitor)
         {
-            Cache.RunNode(Visitor);
+            VisitorTarget.RunNode(Visitor);
 
             return Visitor;
         }
 
+        protected void FinishInitialization()
+        {
+            ProcessGetCall();
+            ProcessOnChange();
+            ProcessSetCall();
+            CreateCachedDrawer();
+        }
+
+        protected void ProcessGetCall()
+        {
+            GetExpression.Compile();
+        }
+
+        protected void ProcessOnChange()
+        {
+            if (OnChange is null)
+            {
+                return;
+            }
+
+            var expr = OnChange.ProcessOnChangeAttribute(MemberInfo);
+
+            OnChangeExpr = new()
+            {
+                Expresion = expr,
+            };
+        }
+
+        protected void ProcessSetCall()
+        {
+            if (OnChangeExpr != null)
+            {
+                var original = SetExpression.Expresion;
+
+                var chained = original.AppendCallback(OnChangeExpr.Expresion);
+
+                SetExpression.Expresion = chained;
+            }
+
+            SetExpression.Compile();
+        }
+
         protected void CreateCachedDrawer()
         {
-            if (EnumEditor.IsTarget(MemberType))
+            if (MemberType.IsEnum())
             {
-                Cache = new EnumEditor(this);
+                VisitorTarget = new EnumEditor(this);
                 return;
             }
 
-            if (ArrayEditor.IsTarget(MemberType))
+            if (MemberType.IsArray())
             {
-                Cache = new ArrayEditor(this);
+                VisitorTarget = new ArrayEditor(this);
                 return;
             }
 
-            if (PrimitiveEditor.IsTarget(MemberType, out var binding))
+            if (MemberType.IsPrimitive(out var binding))
             {
-                Cache = new PrimitiveEditor(this, binding);
+                VisitorTarget = new PrimitiveEditor(this, binding);
                 return;
             }
 
-            if (ChildEditor.IsTarget(MemberType))
+            if (MemberType.IsChild())
             {
-                Cache = new ChildEditor(this);
+                VisitorTarget = new ChildEditor(this);
                 return;
             }
 
-            if (NativeUnityObjectEditor.IsTarget(MemberType))
+            if (MemberType.IsUnityObject())
             {
-                Cache = new NativeUnityObjectEditor(this);
+                VisitorTarget = new NativeUnityObjectEditor(this);
                 return;
             }
 
             throw new Exception("This Should Not Happen");
         }
+
+        protected override void ProcessAttribute(Attribute Attribute)
+        {
+            if (Attribute is OnChangeAttribute OnChange)
+            {
+                // Not initialized here because lifecicle 
+                // and constructor hell :)
+                this.OnChange = OnChange;
+                return;
+            }
+
+            base.ProcessAttribute(Attribute);
+        }
     }
 
-    public abstract class UiToolkitValueMemberInternal<TGetDelegate, TSetDelegate> :
+    public abstract class UiToolkitValueMemberInternal :
     UiToolkitMember,
-    IOnChangeMember,
     IUiToolkitDraw,
-    IUiToolkitValueMemberInternal<TGetDelegate, TSetDelegate>
-        where TGetDelegate : Delegate
-        where TSetDelegate : Delegate
+    IUiToolkitValueMember
     {
         public string RelativePath => BackingField.Name;
         public abstract FieldInfo BackingField { get; }
         public abstract Type MemberType { get; }
-        public abstract DynamicCall<TGetDelegate> GetExpression { get; }
-        public abstract DynamicCall<TSetDelegate> SetExpression { get; }
+        public abstract DynamicCall<GetDelegate> GetExpression { get; }
+        public abstract DynamicCall<SetDelegate> SetExpression { get; }
+        public abstract BaseVisitorTarget VisitorTarget { get; protected set; }
 
         public bool IsRuntimeOnly { get; protected set; }
-        public DynamicCall<OnChange> OnChangeExpr { get; protected set; }
-
 
         protected UiToolkitValueMemberInternal(MemberInfo MemberInfo, InspectableMemberExtras InspectableMemberExtras)
             : base(MemberInfo, InspectableMemberExtras) { }
 
         protected override void ProcessAttribute(Attribute Attribute)
         {
-            if (Attribute is OnChangeAttribute OnChange)
-            {
-                var expr = OnChange.ProcessOnChangeAttribute(MemberInfo);
-
-                OnChangeExpr = new()
-                {
-                    Expresion = expr,
-                };
-
-                return;
-            }
-
             if (Attribute is RuntimeOnlyAttribute _)
             {
                 IsRuntimeOnly = true;
@@ -104,6 +146,6 @@ namespace UnnamedUiToolkit
             base.ProcessAttribute(Attribute);
         }
 
-        public abstract DrawerVisitor Draw(DrawerVisitor Visitor);
+        public abstract NodeVisitor Draw(NodeVisitor Visitor);
     }
 }

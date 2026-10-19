@@ -1,5 +1,3 @@
-
-using System;
 using UnityEditor;
 
 namespace UnnamedUiToolkit
@@ -11,7 +9,7 @@ namespace UnnamedUiToolkit
 
         protected bool IsFoldoutOpen { get; set; } = true;
 
-        public override DrawerVisitor RunNode(DrawerVisitor Visitor)
+        public override NodeVisitor RunNode(NodeVisitor Visitor)
         {
             // Create a foldout header for the nested object
             IsFoldoutOpen = EditorGUILayout.Foldout(foldout: IsFoldoutOpen, content: Member.DisplayName, toggleOnLabelClick: true);

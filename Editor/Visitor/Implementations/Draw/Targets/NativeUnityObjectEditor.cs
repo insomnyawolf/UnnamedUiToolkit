@@ -1,22 +1,13 @@
-
-using System;
 using UnityEditor;
 
 namespace UnnamedUiToolkit
 {
     public class NativeUnityObjectEditor : DrawerVisitorTarget
     {
-        public static bool IsTarget(Type _)
-        {
-            // Fallback Case For:
-            // Transforms, GameObjects, Components, Scripts... 
-            return true;
-        }
-
         public NativeUnityObjectEditor(IUiToolkitValueMember Member)
             : base(Member) { }
 
-        public override DrawerVisitor RunNode(DrawerVisitor Visitor)
+        public override NodeVisitor RunNode(NodeVisitor Visitor)
         {
             var values = Visitor.Values;
 

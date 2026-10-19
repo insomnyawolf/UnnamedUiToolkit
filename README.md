@@ -34,15 +34,17 @@ On development, accepting feature requests
 
 ## Note to self
 
+### On Hold
+
+the drawer cache is copuled in a weird way that i don't like(you were so close...)
 
 ### Work in progress
 
-#### Implement update callback
+Working on these atm
 
-Easy as cacke, programatically trigger a rebind event that persist data updated by events like:
+#### Fix update callback
 
-* Button
-* OnChange
+I don't know what's going on, it seems to fire properly an go throught the nodes properly but something is not working
 
 #### Cache all reflection
 
@@ -60,4 +62,6 @@ ToDo =>
 
 This attributte exists and it's super useful, use it
 
+```cs
 [DebuggerDisplay(value: "{AngleDelta}", Name = "{Point}")]
+```

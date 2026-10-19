@@ -1,8 +1,6 @@
-using System;
-
 namespace UnnamedUiToolkit
 {
-    public interface IOnChangeMember : IUiToolkitMember
+    public interface IOnChangeMember : IUiToolkitValueMember
     {
         public DynamicCall<OnChange> OnChangeExpr { get; }
     }
