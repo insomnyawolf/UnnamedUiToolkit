@@ -12,6 +12,8 @@ namespace UnnamedUiToolkit
             : base(InspectableMemberExtras)
         {
             if (MethodInfo is null) return;
+
+            DisplayName ??= ObjectNames.NicifyVariableName(MethodInfo.Name);
             
             Delegate = new()
             {

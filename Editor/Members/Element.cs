@@ -26,7 +26,6 @@ namespace UnnamedUiToolkit
         {
             if (Attribute is DisplayNameAttribute DisplayName)
             {
-                //this.DisplayName = DisplayName.Name;
                 this.DisplayName = ObjectNames.NicifyVariableName(DisplayName.Name);
                 return;
             }
