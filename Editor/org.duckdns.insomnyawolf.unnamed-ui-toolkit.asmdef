@@ -1,8 +1,8 @@
 {
-    "name": "org.duckdns.insomnyawolf.UnnamedUiToolkit",
-    "rootNamespace": "",
+    "name": "org.duckdns.insomnyawolf.unnamed-ui-toolkit",
+    "rootNamespace": "UnnamedUiToolkit",
     "references": [
-        "org.duckdns.insomnyawolf.UnnamedUiToolkit.Runtime"
+        "org.duckdns.insomnyawolf.unnamed-ui-toolkit.runtime"
     ],
     "includePlatforms": [
         "Editor"

@@ -5,7 +5,7 @@ using UnityEngine;
 [Serializable]
 [UnnamedUiToolkit]
 [DisallowMultipleComponent]
-public class InsoTestL0 : MonoBehaviour// : InsoComponentBase
+internal class InsoTestL0 : MonoBehaviour// : InsoComponentBase
 {
     // [OnChange(nameof(CallbackTest))]
     // [field: SerializeField]
@@ -49,7 +49,7 @@ public class InsoTestL0 : MonoBehaviour// : InsoComponentBase
 }
 
 [Serializable]
-public class TestData
+internal class TestData
 {
     // public bool FieldTest;
 
@@ -79,7 +79,7 @@ public class TestData
 }
 
 [Serializable]
-public class InsoTestL1 : TestData
+internal class InsoTestL1 : TestData
 {
 
     [field: SerializeField]
@@ -87,14 +87,14 @@ public class InsoTestL1 : TestData
 }
 
 [Serializable]
-public class InsoTestL2 : TestData
+internal class InsoTestL2 : TestData
 {
     [field: SerializeField]
     public InsoTestL3 InsoTestL3 { get; set; }
 }
 
 [Serializable]
-public class InsoTestL3 : TestData
+internal class InsoTestL3 : TestData
 {
     public string StringField;
 
@@ -106,15 +106,15 @@ public class InsoTestL3 : TestData
 }
 
 [Serializable]
-public class InsoConfigTest
+internal class InsoConfigTest
 {
     public bool Bypass;
 
     [field: SerializeField]
-    public AnimatorConfig AnimatorConfig { get; set; }
+    public AnimatorConfigTest AnimatorConfig { get; set; }
 
     [field: SerializeField]
-    public PluginConfig PluginConfig { get; set; }
+    public PluginConfigTest PluginConfig { get; set; }
 
     [Button]
     public void SetTrue() => SetAll(true);
@@ -138,7 +138,7 @@ public class InsoConfigTest
 
 [Serializable]
 [DisallowMultipleComponent]
-public class AnimatorConfig
+internal class AnimatorConfigTest
 {
     [field: SerializeField]
     public bool DeleteUnreachableStates { get; set; }
@@ -157,7 +157,7 @@ public class AnimatorConfig
 
 [Serializable]
 [DisallowMultipleComponent]
-public class PluginConfig
+internal class PluginConfigTest
 {
     [field: SerializeField]
     public bool DetailedReport { get; set; }

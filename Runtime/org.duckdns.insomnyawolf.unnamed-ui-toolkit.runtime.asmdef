@@ -1,6 +1,6 @@
 {
-    "name": "org.duckdns.insomnyawolf.UnnamedUiToolkit.Runtime",
-    "rootNamespace": "",
+    "name": "org.duckdns.insomnyawolf.unnamed-ui-toolkit.runtime",
+    "rootNamespace": "UnnamedUiToolkit",
     "references": [
         "com.unity.nuget.newtonsoft-json"
     ],
