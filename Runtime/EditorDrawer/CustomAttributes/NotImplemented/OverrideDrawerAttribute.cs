@@ -1,3 +1,4 @@
-using System;
-
-public class OverrideDrawerAttribute : UnnamedUiToolkitAttribute { }
+// namespace UnnamedUiToolkit
+// {
+//     public class OverrideDrawerAttribute : UnnamedUiToolkitAttribute { }
+// }

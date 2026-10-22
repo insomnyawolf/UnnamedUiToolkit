@@ -3,33 +3,36 @@ using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-public static class GenericReflectionHelpers
+namespace UnnamedUiToolkit
 {
-    public const BindingFlags ReflectionFlags =
-    BindingFlags.Instance
-    |
-    BindingFlags.Public
-    |
-    BindingFlags.NonPublic
-    |
-    BindingFlags.FlattenHierarchy
-    ;
-
-    public static bool TryGetInstance(this Delegate action, out object Target, out Type TargetType, out bool IsClosure)
+    public static class GenericReflectionHelpers
     {
-        IsClosure = false;
-        TargetType = null;
-        Target = action?.Target;
+        public const BindingFlags ReflectionFlags =
+        BindingFlags.Instance
+        |
+        BindingFlags.Public
+        |
+        BindingFlags.NonPublic
+        |
+        BindingFlags.FlattenHierarchy
+        ;
 
-        if (Target is null)
+        public static bool TryGetInstance(this Delegate action, out object Target, out Type TargetType, out bool IsClosure)
         {
-            return false;
+            IsClosure = false;
+            TargetType = null;
+            Target = action?.Target;
+
+            if (Target is null)
+            {
+                return false;
+            }
+
+            TargetType = Target.GetType();
+
+            IsClosure = TargetType.GetCustomAttribute<CompilerGeneratedAttribute>() is not null;
+
+            return true;
         }
-
-        TargetType = Target.GetType();
-
-        IsClosure = TargetType.GetCustomAttribute<CompilerGeneratedAttribute>() is not null;
-
-        return true;
     }
 }

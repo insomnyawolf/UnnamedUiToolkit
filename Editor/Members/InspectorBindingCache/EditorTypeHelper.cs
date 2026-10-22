@@ -65,10 +65,15 @@ namespace UnnamedUiToolkit
                 return false;
             }
 
-            if (MemberType.IsEnum)
+            if (MemberType.IsBasic())
             {
                 return false;
             }
+
+            // if (MemberType.IsEnum)
+            // {
+            //     return false;
+            // }
 
             if (MemberType.IsUnityNativeType())
             {

@@ -1,38 +1,42 @@
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
-public static class AccessorExtensions
+
+namespace UnnamedUiToolkit
 {
-    // Those last two are not good enough
-
-    public static Expression<TDelegateType> CreateSetDelegate<TDelegateType>(this FieldInfo fieldInfo)
-        where TDelegateType : Delegate
+    public static class AccessorExtensions
     {
-        var instanceParam = Expression.Parameter(typeof(object), "instance");
-        var convertInstance = Expression.Convert(instanceParam, fieldInfo.DeclaringType);
+        // Those last two are not good enough
 
-        var valueParam = Expression.Parameter(typeof(object), "nameof(TValue)");
-        var convertValue = Expression.Convert(valueParam, fieldInfo.FieldType);
+        public static Expression<TDelegateType> CreateSetDelegate<TDelegateType>(this FieldInfo fieldInfo)
+            where TDelegateType : Delegate
+        {
+            var instanceParam = Expression.Parameter(typeof(object), "instance");
+            var convertInstance = Expression.Convert(instanceParam, fieldInfo.DeclaringType);
 
-        var fieldExpr = Expression.Field(convertInstance, fieldInfo);
-        var assignExpr = Expression.Assign(fieldExpr, convertValue);
+            var valueParam = Expression.Parameter(typeof(object), "nameof(TValue)");
+            var convertValue = Expression.Convert(valueParam, fieldInfo.FieldType);
 
-        var lambda = assignExpr.CreateLambda<TDelegateType>(new [] {instanceParam, valueParam});
+            var fieldExpr = Expression.Field(convertInstance, fieldInfo);
+            var assignExpr = Expression.Assign(fieldExpr, convertValue);
 
-        return lambda;
-    }
+            var lambda = assignExpr.CreateLambda<TDelegateType>(new[] { instanceParam, valueParam });
 
-    public static Expression<TDelegateType> CreateGetDelegate<TDelegateType>(this FieldInfo fieldInfo)
-        where TDelegateType : Delegate
-    {
-        var instanceParam = Expression.Parameter(typeof(object), "instance");
-        var convertInstance = Expression.Convert(instanceParam, fieldInfo.DeclaringType);
+            return lambda;
+        }
 
-        var fieldExpr = Expression.Field(convertInstance, fieldInfo);
-        var convertedField = Expression.Convert(fieldExpr, typeof(object));
+        public static Expression<TDelegateType> CreateGetDelegate<TDelegateType>(this FieldInfo fieldInfo)
+            where TDelegateType : Delegate
+        {
+            var instanceParam = Expression.Parameter(typeof(object), "instance");
+            var convertInstance = Expression.Convert(instanceParam, fieldInfo.DeclaringType);
 
-        var lambda = convertedField.CreateLambda<TDelegateType>(new [] {instanceParam});
+            var fieldExpr = Expression.Field(convertInstance, fieldInfo);
+            var convertedField = Expression.Convert(fieldExpr, typeof(object));
 
-        return lambda;
+            var lambda = convertedField.CreateLambda<TDelegateType>(new[] { instanceParam });
+
+            return lambda;
+        }
     }
 }

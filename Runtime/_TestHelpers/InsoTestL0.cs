@@ -1,6 +1,7 @@
 
 using System;
 using UnityEngine;
+using UnnamedUiToolkit;
 
 [Serializable]
 [UnnamedUiToolkit]
@@ -62,6 +63,8 @@ internal class TestData
 
     // [field: SerializeField]
     // public int[] IntTest2 { get; set; }
+
+    public HumanBodyBones Bone = HumanBodyBones.LastBone;
 
     [OnChange(nameof(CallbackTest))]
     [field: SerializeField]

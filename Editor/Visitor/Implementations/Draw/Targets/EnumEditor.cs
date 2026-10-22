@@ -1,10 +1,10 @@
+using System;
+
 namespace UnnamedUiToolkit
 {
     public class EnumEditor : DrawerVisitorTarget
     {
-        protected static InspectorBinding Cache = InspectorBindingCache.EnumDrawer;
-        protected static InspectorBindingDelegate Compiled = Cache.Compiled;
-
+        protected static InspectorBinding BaseCache = InspectorBindingCache.EnumDrawer;
         public EnumEditor(IUiToolkitValueMember Member)
             : base(Member) { }
 
@@ -12,7 +12,9 @@ namespace UnnamedUiToolkit
         {
             var values = Visitor.Values;
 
-            var newVal = Compiled(Member.DisplayName, values.Value, Constants.EmptyGuiLayoutOptions);
+            var preValue = Enum.ToObject(Member.MemberType, values.Value);
+            
+            var newVal = BaseCache.Compiled(Member.DisplayName, preValue, Constants.EmptyGuiLayoutOptions);
 
             values.Update(newVal);
 

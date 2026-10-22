@@ -3,32 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-public static class AttributeExtensions
+namespace UnnamedUiToolkit
 {
-    public static List<Attribute> GetAllAttributres(this MemberInfo MemberInfo)
+    public static class AttributeExtensions
     {
-        var attrs = MemberInfo.GetCustomAttributes(inherit: true).Cast<Attribute>().ToList();
-
-        return attrs;
-    }
-
-    public static bool TryFindAttribute<TAttribute>(this List<Attribute> Attributes, out TAttribute Attribute)
-        where TAttribute : Attribute
-    {
-        for (int i = 0; i < Attributes.Count; i++)
+        public static List<Attribute> GetAllAttributres(this MemberInfo MemberInfo)
         {
-            var c = Attributes[i];
+            var attrs = MemberInfo.GetCustomAttributes(inherit: true).Cast<Attribute>().ToList();
 
-            if (c is TAttribute Attr)
-            {
-                Attribute = Attr;
-
-                return true;
-            }
+            return attrs;
         }
 
-        Attribute = null;
+        public static bool TryFindAttribute<TAttribute>(this List<Attribute> Attributes, out TAttribute Attribute)
+            where TAttribute : Attribute
+        {
+            for (int i = 0; i < Attributes.Count; i++)
+            {
+                var c = Attributes[i];
 
-        return false;
+                if (c is TAttribute Attr)
+                {
+                    Attribute = Attr;
+
+                    return true;
+                }
+            }
+
+            Attribute = null;
+
+            return false;
+        }
     }
 }

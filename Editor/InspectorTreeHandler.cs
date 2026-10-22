@@ -45,11 +45,12 @@ namespace UnnamedUiToolkit
             Members.Clear();
 
             var members = TargetType.GetMembers(GenericReflectionHelpers.ReflectionFlags)
-                .Where(member => !member.DeclaringType.IsUnityNativeType())
+                //.Where(member => !member.DeclaringType.IsUnityNativeType())
             //.Reverse()
             //.OrderBy(OrderControls)
                 .OrderBy(m => m.MetadataToken)
                 .ToList()
+                
             ;
 
             foreach (var member in members)

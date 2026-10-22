@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using UnityEngine;
 
 namespace UnnamedUiToolkit
 {
@@ -21,7 +22,7 @@ namespace UnnamedUiToolkit
 
         public override NodeVisitor Draw(NodeVisitor Visitor)
         {
-            VisitorTarget.RunNode(Visitor);
+            VisitorTarget?.RunNode(Visitor);
 
             return Visitor;
         }
@@ -100,7 +101,7 @@ namespace UnnamedUiToolkit
                 return;
             }
 
-            throw new Exception("This Should Not Happen");
+            Debug.LogError($"Could not create cached drawer for: \n{DisplayName}: {MemberType}");
         }
 
         protected override void ProcessAttribute(Attribute Attribute)

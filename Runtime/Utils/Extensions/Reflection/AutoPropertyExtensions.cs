@@ -3,64 +3,67 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
-public static class AutoPropertyExtensions
+namespace UnnamedUiToolkit
 {
-    // $"<{prop.Name}>k__BackingField";
-
-    private const string Prefix = "<";
-    private const string Suffix = ">k__BackingField";
-    private static readonly Regex AutoPropertyRegex = new($"{Prefix}(.+?){Suffix}", RegexOptions.Singleline | RegexOptions.Compiled);
-
-    private static string GetBackingFieldName(string propertyName) => $"{Prefix}{propertyName}{Suffix}";
-
-    private static string GetAutoPropertyName(string fieldName)
+    public static class AutoPropertyExtensions
     {
-        var match = AutoPropertyRegex.Match(fieldName);
+        // $"<{prop.Name}>k__BackingField";
 
-        if (!match.Success) return null;
+        private const string Prefix = "<";
+        private const string Suffix = ">k__BackingField";
+        private static readonly Regex AutoPropertyRegex = new($"{Prefix}(.+?){Suffix}", RegexOptions.Singleline | RegexOptions.Compiled);
 
-        return match.Groups[1].Value;
-    }
+        private static string GetBackingFieldName(string propertyName) => $"{Prefix}{propertyName}{Suffix}";
 
-    public static bool IsAnAutoProperty(this PropertyInfo propertyInfo) => propertyInfo.GetBackingField() != null;
+        private static string GetAutoPropertyName(string fieldName)
+        {
+            var match = AutoPropertyRegex.Match(fieldName);
 
-    public static bool IsBackingFieldOfAnAutoProperty(this FieldInfo propertyInfo) => propertyInfo.GetAutoProperty() != null;
+            if (!match.Success) return null;
 
-    public static FieldInfo GetBackingField(this PropertyInfo propertyInfo)
-    {
-        if (propertyInfo is null) throw new ArgumentNullException(nameof(propertyInfo));
+            return match.Groups[1].Value;
+        }
 
-        if (!propertyInfo.CanRead || !propertyInfo.GetGetMethod(nonPublic: true).IsDefined(typeof(CompilerGeneratedAttribute), inherit: true))
-            return null;
+        public static bool IsAnAutoProperty(this PropertyInfo propertyInfo) => propertyInfo.GetBackingField() != null;
 
-        var backingFieldName = GetBackingFieldName(propertyInfo.Name);
+        public static bool IsBackingFieldOfAnAutoProperty(this FieldInfo propertyInfo) => propertyInfo.GetAutoProperty() != null;
 
-        var backingField = propertyInfo.DeclaringType?.GetField(backingFieldName, BindingFlags.Instance | BindingFlags.NonPublic);
+        public static FieldInfo GetBackingField(this PropertyInfo propertyInfo)
+        {
+            if (propertyInfo is null) throw new ArgumentNullException(nameof(propertyInfo));
 
-        if (backingField is null) return null;
+            if (!propertyInfo.CanRead || !propertyInfo.GetGetMethod(nonPublic: true).IsDefined(typeof(CompilerGeneratedAttribute), inherit: true))
+                return null;
 
-        if (!backingField.IsDefined(typeof(CompilerGeneratedAttribute), inherit: true)) return null;
+            var backingFieldName = GetBackingFieldName(propertyInfo.Name);
 
-        return backingField;
-    }
+            var backingField = propertyInfo.DeclaringType?.GetField(backingFieldName, BindingFlags.Instance | BindingFlags.NonPublic);
 
-    public static PropertyInfo GetAutoProperty(this FieldInfo fieldInfo)
-    {
-        if (fieldInfo is null) throw new ArgumentNullException(nameof(fieldInfo));
+            if (backingField is null) return null;
 
-        if (!fieldInfo.IsDefined(typeof(CompilerGeneratedAttribute), inherit: true)) return null;
+            if (!backingField.IsDefined(typeof(CompilerGeneratedAttribute), inherit: true)) return null;
 
-        var autoPropertyName = GetAutoPropertyName(fieldInfo.Name);
+            return backingField;
+        }
 
-        if (autoPropertyName is null) return null;
+        public static PropertyInfo GetAutoProperty(this FieldInfo fieldInfo)
+        {
+            if (fieldInfo is null) throw new ArgumentNullException(nameof(fieldInfo));
 
-        var autoProperty = fieldInfo.DeclaringType?.GetProperty(autoPropertyName);
+            if (!fieldInfo.IsDefined(typeof(CompilerGeneratedAttribute), inherit: true)) return null;
 
-        if (autoProperty is null) return null;
+            var autoPropertyName = GetAutoPropertyName(fieldInfo.Name);
 
-        if (!autoProperty.CanRead || !autoProperty.GetGetMethod(nonPublic: true).IsDefined(typeof(CompilerGeneratedAttribute), inherit: true))
-            return null;
+            if (autoPropertyName is null) return null;
 
-        return autoProperty;
+            var autoProperty = fieldInfo.DeclaringType?.GetProperty(autoPropertyName);
+
+            if (autoProperty is null) return null;
+
+            if (!autoProperty.CanRead || !autoProperty.GetGetMethod(nonPublic: true).IsDefined(typeof(CompilerGeneratedAttribute), inherit: true))
+                return null;
+
+            return autoProperty;
+        }
     }
 }

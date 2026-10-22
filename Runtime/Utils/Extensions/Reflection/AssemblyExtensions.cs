@@ -1,48 +1,50 @@
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-public static class AssemblyExtensions
+namespace UnnamedUiToolkit
 {
-    public static IEnumerable<Type> GetClassesOfTypeInItsAssembly<TType>()
+    public static class AssemblyExtensions
     {
-        var TargetType = typeof(TType);
-
-        var Assembly = TargetType.Assembly;
-
-        var allTypes = Assembly.GetTypes();
-
-        var filtered = allTypes.Where(Filter);
-
-        return filtered;
-
-        bool Filter(Type Type)
+        public static IEnumerable<Type> GetClassesOfTypeInItsAssembly<TType>()
         {
-            if (Type.IsAbstract)
-            {
-                return false;
-            }
+            var TargetType = typeof(TType);
 
-            if (!Type.IsClass)
-            {
-                return false;
-            }
+            var Assembly = TargetType.Assembly;
 
-            if (!Type.IsPublic)
-            {
-                return false;
-            }
+            var allTypes = Assembly.GetTypes();
 
-            if (!Type.IsSubclassOf(TargetType))
-            {
-                return false;
-            }
+            var filtered = allTypes.Where(Filter);
 
-            return true;
+            return filtered;
+
+            bool Filter(Type Type)
+            {
+                if (Type.IsAbstract)
+                {
+                    return false;
+                }
+
+                if (!Type.IsClass)
+                {
+                    return false;
+                }
+
+                if (!Type.IsPublic)
+                {
+                    return false;
+                }
+
+                if (!Type.IsSubclassOf(TargetType))
+                {
+                    return false;
+                }
+
+                return true;
+            }
         }
-    }
 
+    }
 }
