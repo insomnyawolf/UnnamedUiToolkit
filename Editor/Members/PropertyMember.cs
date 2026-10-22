@@ -7,8 +7,8 @@ namespace UnnamedUiToolkit
     {
         public override FieldInfo BackingField { get; }
         public override Type MemberType { get; }
-        public override DynamicCall<GetDelegate> GetExpression { get; }
-        public override DynamicCall<SetDelegate> SetExpression { get; }
+        public override DynamicCall<GetDelegate> GetExpression { get; protected set; }
+        public override DynamicCall<SetDelegate> SetExpression { get; protected set; }
 
         public UiToolkitPropertyMember(PropertyInfo MemberInfo, FieldInfo BackingField, InspectableMemberExtras InspectableMemberExtras)
             : base(MemberInfo, InspectableMemberExtras)

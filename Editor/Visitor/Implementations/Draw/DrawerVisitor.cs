@@ -46,7 +46,9 @@ namespace UnnamedUiToolkit
 
             if (SerializedProperty != null)
             {
-                Values.Update(SerializedProperty.boxedValue);
+                var savedVal = SerializedProperty.boxedValue;
+
+                Values.Update(savedVal);
             }
 
             ValueMember.Draw(this);
@@ -56,9 +58,12 @@ namespace UnnamedUiToolkit
             // !ValueMember.MemberType.IsChild()
             // Serialized fields fail to update on events ....
             // I'm so confused ...
-            if (!Values.HasChanged() && !ValueMember.MemberType.IsChild())
+            if (!Values.HasChanged())
             {
-                return;
+                if (!ValueMember.MemberType.IsChild())
+                {
+                    return;
+                }
             }
 
             var newValue = Values.Value;

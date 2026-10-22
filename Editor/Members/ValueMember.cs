@@ -1,4 +1,5 @@
 using System;
+using System.Linq.Expressions;
 using System.Reflection;
 using UnityEngine;
 
@@ -123,11 +124,11 @@ namespace UnnamedUiToolkit
     IUiToolkitDraw,
     IUiToolkitValueMember
     {
-        public string RelativePath => BackingField.Name;
+        public string RelativePath => BackingField?.Name;
         public abstract FieldInfo BackingField { get; }
         public abstract Type MemberType { get; }
-        public abstract DynamicCall<GetDelegate> GetExpression { get; }
-        public abstract DynamicCall<SetDelegate> SetExpression { get; }
+        public abstract DynamicCall<GetDelegate> GetExpression { get; protected set; }
+        public abstract DynamicCall<SetDelegate> SetExpression { get; protected set; }
         public abstract BaseVisitorTarget VisitorTarget { get; protected set; }
 
         public bool IsRuntimeOnly { get; protected set; }

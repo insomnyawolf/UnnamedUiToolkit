@@ -107,10 +107,10 @@ namespace UnnamedUiToolkit
         {
             var BackingField = PropertyInfo.GetBackingField();
 
-            if (BackingField is null)
-            {
-                return null;
-            }
+            // if (BackingField is null)
+            // {
+            //     return null;
+            // }
 
             // if (KnownMappings.TryGetValue(BackingField, out var extras))
             // {

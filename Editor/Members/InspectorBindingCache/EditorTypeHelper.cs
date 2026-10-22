@@ -75,6 +75,11 @@ namespace UnnamedUiToolkit
             //     return false;
             // }
 
+            if (MemberType.IsUnityObject())
+            {
+                return false;
+            }
+
             if (MemberType.IsUnityInternal())
             {
                 return false;
