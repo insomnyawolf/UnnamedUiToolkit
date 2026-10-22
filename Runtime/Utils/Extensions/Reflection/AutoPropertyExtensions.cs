@@ -65,5 +65,48 @@ namespace UnnamedUiToolkit
 
             return autoProperty;
         }
+
+        ////[Experimental]
+        // private static FieldInfo GetExactBackingFieldFromIL(PropertyInfo property)
+        // {
+        //     var getter = property.GetGetMethod(true);
+        //     if (getter == null) return null;
+
+        //     var body = getter.GetMethodBody();
+        //     if (body == null) return null;
+
+        //     byte[] ilBytes = body.GetILAsByteArray();
+
+        //     // scan for ldfld (OpCode value 0x7B)
+        //     for (int i = 0; i < ilBytes.Length - 4; i++)
+        //     {
+        //         // 0xFE, 0x7B is ldfld in some contexts, but standard inline token ldfld starts with 0x7B 
+        //         // Note: IL instruction tokens are 4 bytes following the opcode.
+        //         ushort opCode = (i > 0 && ilBytes[i - 1] == 0xFE)
+        //             ? (ushort)((ilBytes[i - 1] << 8) | ilBytes[i])
+        //             : (ushort)ilBytes[i];
+
+        //         // LDFLD opcode check (0x7B)
+        //         if (ilBytes[i] == 0x7B)
+        //         {
+        //             int metadataToken = BitConverter.ToInt32(ilBytes, i + 1);
+        //             try
+        //             {
+        //                 var module = getter.Module;
+        //                 var member = module.ResolveMember(metadataToken);
+        //                 if (member is FieldInfo field)
+        //                 {
+        //                     return field;
+        //                 }
+        //             }
+        //             catch
+        //             {
+        //                 // Token resolution can occasionally fail depending on context, ignore and keep scanning
+        //             }
+        //         }
+        //     }
+
+        //     return null;
+        // }
     }
 }

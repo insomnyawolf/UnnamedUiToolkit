@@ -89,15 +89,15 @@ namespace UnnamedUiToolkit
                 return;
             }
 
-            if (MemberType.IsChild())
-            {
-                VisitorTarget = new ChildEditor(this);
-                return;
-            }
-
             if (MemberType.IsUnityObject())
             {
                 VisitorTarget = new NativeUnityObjectEditor(this);
+                return;
+            }
+
+            if (MemberType.IsChild())
+            {
+                VisitorTarget = new ChildEditor(this);
                 return;
             }
 

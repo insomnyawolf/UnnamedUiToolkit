@@ -36,7 +36,7 @@ namespace UnnamedUiToolkit
                 return false;
             }
 
-            if (MemberType.IsUnityNativeType())
+            if (MemberType.IsUnityInternal())
             {
                 return false;
             }
@@ -75,7 +75,7 @@ namespace UnnamedUiToolkit
             //     return false;
             // }
 
-            if (MemberType.IsUnityNativeType())
+            if (MemberType.IsUnityInternal())
             {
                 return false;
             }

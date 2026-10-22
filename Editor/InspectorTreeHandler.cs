@@ -45,8 +45,8 @@ namespace UnnamedUiToolkit
             Members.Clear();
 
             var members = TargetType.GetMembers(GenericReflectionHelpers.ReflectionFlags)
-                //.Where(member => !member.DeclaringType.IsUnityNativeType())
             //.Reverse()
+                .Where(member => !member.IsUnityInternal())
             //.OrderBy(OrderControls)
                 .OrderBy(m => m.MetadataToken)
                 .ToList()
@@ -107,7 +107,10 @@ namespace UnnamedUiToolkit
         {
             var BackingField = PropertyInfo.GetBackingField();
 
-            if (BackingField is null) return null;
+            if (BackingField is null)
+            {
+                return null;
+            }
 
             // if (KnownMappings.TryGetValue(BackingField, out var extras))
             // {

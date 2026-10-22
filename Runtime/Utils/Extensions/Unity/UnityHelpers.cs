@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reflection;
 
 namespace UnnamedUiToolkit
 {
@@ -11,7 +12,7 @@ namespace UnnamedUiToolkit
             "UnityEngine",
         };
 
-        public static bool IsUnityNativeType(this Type type)
+        public static bool IsUnityInternal(this MemberInfo type)
         {
             // if (type.Namespace is string ns)
             // {

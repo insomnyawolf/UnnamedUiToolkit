@@ -1,5 +1,7 @@
 # UnnamedUiToolkit
 
+This is a simple tool to help it's users easily create advanced unity editors in a declarative way
+
 Originally built as part of ``org.duckdns.insomnyawolf.ndmf-tools``
 
 After a lot of shotcomings and issues i decided to rewrite it (once again ;-;) 
