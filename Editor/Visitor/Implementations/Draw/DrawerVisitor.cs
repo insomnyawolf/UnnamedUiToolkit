@@ -51,18 +51,23 @@ namespace UnnamedUiToolkit
             }
 
             ValueMember.Draw(this);
-
-            // WHYYYYYYYYYYYYYYYYYYYYY
-            // Without the:
-            // !ValueMember.MemberType.IsChild()
-            // Serialized fields fail to update on events ....
-            // I'm so confused ...
             if (!Values.HasChanged())
             {
+
+                // WHYYYYYYYYYYYYYYYYYYYYY
+                // Without the:
+                // !ValueMember.MemberType.IsChild()
+                // Serialized fields fail to update on events ....
+                // I'm so confused ...
                 // if (!ValueMember.MemberType.IsChild())
                 // {
                 //     return;
                 // }
+
+                // Nvm using "Undo.RegisterCompleteObjectUndo" 
+                // instead of "Undo.RecordObject"
+                // fixed it :)
+                // Finally \:D/
 
                 return;
             }
