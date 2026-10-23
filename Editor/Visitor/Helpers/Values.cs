@@ -33,7 +33,6 @@ namespace UnnamedUiToolkit
                 return false;
             }
 
-            
             // == for UnityEngine.Object
             if (OldValue == NewValue)
             {

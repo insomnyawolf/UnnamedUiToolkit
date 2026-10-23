@@ -27,7 +27,7 @@ namespace UnnamedUiToolkit
         {
             if (!GUILayout.Button(DisplayName)) return DrawerVisitor;
 
-            Undo.RecordObject(DrawerVisitor.RootTarget, $"Executed {DisplayName}");
+            Undo.RegisterCompleteObjectUndo(DrawerVisitor.RootTarget, $"Executed {DisplayName}");
 
             Delegate.Compiled(DrawerVisitor.Instance);
 

@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using UnityEditor;
 
 namespace UnnamedUiToolkit
@@ -60,13 +59,15 @@ namespace UnnamedUiToolkit
             // I'm so confused ...
             if (!Values.HasChanged())
             {
-                if (!ValueMember.MemberType.IsChild())
-                {
-                    return;
-                }
+                // if (!ValueMember.MemberType.IsChild())
+                // {
+                //     return;
+                // }
+
+                return;
             }
 
-            Undo.RecordObject(RootTarget, $"Changed {ValueMember.DisplayName}");
+            Undo.RegisterCompleteObjectUndo(RootTarget, $"Changed {ValueMember.DisplayName}");
 
             var newValue = Values.Value;
 
