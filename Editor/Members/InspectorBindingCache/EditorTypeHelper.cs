@@ -70,11 +70,6 @@ namespace UnnamedUiToolkit
                 return false;
             }
 
-            // if (MemberType.IsEnum)
-            // {
-            //     return false;
-            // }
-
             if (MemberType.IsUnityObject())
             {
                 return false;

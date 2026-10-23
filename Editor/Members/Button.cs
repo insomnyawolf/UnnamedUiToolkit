@@ -33,8 +33,9 @@ namespace UnnamedUiToolkit
 
             DrawerVisitor.TriggerUiEvent(UiEventType.Update);
 
-            // Should be set dirty bu the update itself (?)
-            //EditorUtility.SetDirty(DrawerVisitor.RootTarget);
+            DrawerVisitor.SerializedObject.ApplyModifiedProperties();
+
+            EditorUtility.SetDirty(DrawerVisitor.RootTarget);
 
             return DrawerVisitor;
         }

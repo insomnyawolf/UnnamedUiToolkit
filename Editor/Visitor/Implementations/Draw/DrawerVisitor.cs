@@ -85,7 +85,7 @@ namespace UnnamedUiToolkit
                 }
             }
 
-            SerializedProperty.serializedObject.ApplyModifiedProperties();
+            SerializedObject.ApplyModifiedProperties();
 
             EditorUtility.SetDirty(RootTarget);
         }
