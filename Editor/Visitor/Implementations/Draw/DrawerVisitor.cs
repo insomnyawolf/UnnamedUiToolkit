@@ -66,19 +66,15 @@ namespace UnnamedUiToolkit
                 }
             }
 
+            Undo.RecordObject(RootTarget, $"Changed {ValueMember.DisplayName}");
+
             var newValue = Values.Value;
 
             ValueMember.SetExpression.Compiled(Instance, newValue);
 
             if (SerializedProperty != null)
             {
-                Undo.RecordObject(RootTarget, $"Changed {ValueMember.DisplayName}");
-
                 SerializedProperty.boxedValue = newValue;
-
-                SerializedProperty.serializedObject.ApplyModifiedProperties();
-
-                EditorUtility.SetDirty(RootTarget);
             }
 
             if (ValueMember is IOnChangeMember onChange)
@@ -88,6 +84,10 @@ namespace UnnamedUiToolkit
                     TriggerUiEvent(UiEventType.Update);
                 }
             }
+
+            SerializedProperty.serializedObject.ApplyModifiedProperties();
+
+            EditorUtility.SetDirty(RootTarget);
         }
     }
 }
